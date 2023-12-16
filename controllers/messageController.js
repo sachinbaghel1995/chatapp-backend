@@ -19,6 +19,24 @@ const postMessage = async (req, res) => {
   }
 };
 
+const getMessages = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+
+    const messages = await Message.findAll({
+      where: { userId }, 
+      attributes: ['id', 'text', 'createdAt'], 
+      order: [['createdAt', 'DESC']], 
+    });
+
+    return res.status(200).json({ messages });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
-  postMessage
+  postMessage,
+  getMessages
 };
