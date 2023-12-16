@@ -28,9 +28,12 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require("./userModel.js")(sequelize, DataTypes);
+db.messages=require("./messageModel.js")(sequelize,DataTypes)
 
 db.sequelize.sync({ force: true}).then(() => {
   console.log("sync done");
 });
+db.users.hasMany(db.messages);
+db.messages.belongsTo(db.users);
 
 module.exports = db;
