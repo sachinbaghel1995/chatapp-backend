@@ -21,12 +21,21 @@ const postMessage = async (req, res) => {
 
 const getMessages = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
+    const lastMessageTimestamp = req.query.lastMessageTimestamp; // Retrieve last fetched message timestamp from query params
+
+    let whereClause = { userId };
+    if (lastMessageTimestamp) {
+      whereClause = {
+        userId,
+        createdAt: { [Op.gt]: new Date(lastMessageTimestamp) }, // Retrieve messages created after the last fetched message
+      };
+    }
 
     const messages = await Message.findAll({
-      where: { userId }, 
-      attributes: ['id', 'text', 'createdAt'], 
-      order: [['createdAt', 'DESC']], 
+      where: whereClause,
+      attributes: ['id', 'text', 'createdAt'],
+      order: [['createdAt', 'DESC']],
     });
 
     return res.status(200).json({ messages });

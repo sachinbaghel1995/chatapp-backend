@@ -23,7 +23,7 @@ app.use("/api/users", userRouter);
 
 const messageRouter=require("./routes/messageRouter.js")
 app.use("/api/messages",messageRouter)
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8002;
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
