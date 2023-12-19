@@ -87,9 +87,18 @@ const getUser = async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json({ users });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
 module.exports = {
   addUser,
   login,
   generateAccessToken,
   getUser,
+  getAllUsers
 };

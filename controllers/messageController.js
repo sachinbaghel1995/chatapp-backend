@@ -11,8 +11,10 @@ const postMessage = async (req, res) => {
 
     const userId = req.user.id; // Ensure req.user has user details from authentication
     const response = await Message.create({ text: message, userId });
-    
-    return res.status(201).json({ message: "Message created successfully", data: response });
+
+    return res
+      .status(201)
+      .json({ message: "Message created successfully", data: response });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
@@ -24,18 +26,18 @@ const getMessages = async (req, res) => {
     const userId = req.user.id;
     const lastMessageTimestamp = req.query.lastMessageTimestamp; // Retrieve last fetched message timestamp from query params
 
-    let whereClause = { userId };
+    // let whereClause = { userId };
     if (lastMessageTimestamp) {
       whereClause = {
-        userId,
+        // userId,
         createdAt: { [Op.gt]: new Date(lastMessageTimestamp) }, // Retrieve messages created after the last fetched message
       };
     }
 
     const messages = await Message.findAll({
-      where: whereClause,
-      attributes: ['id', 'text', 'createdAt'],
-      order: [['createdAt', 'DESC']],
+      // where: whereClause,
+      attributes: ["id", "text", "createdAt"],
+      order: [["createdAt", "DESC"]],
     });
 
     return res.status(200).json({ messages });
@@ -47,5 +49,5 @@ const getMessages = async (req, res) => {
 
 module.exports = {
   postMessage,
-  getMessages
+  getMessages,
 };

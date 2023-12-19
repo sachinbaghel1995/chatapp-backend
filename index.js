@@ -23,6 +23,10 @@ app.use("/api/users", userRouter);
 
 const messageRouter=require("./routes/messageRouter.js")
 app.use("/api/messages",messageRouter)
+
+const groupRouter=require("./routes/groupRouter.js")
+app.use("/api/groups",groupRouter)
+
 const PORT = process.env.PORT || 8002;
 
 app.listen(PORT, () => {
