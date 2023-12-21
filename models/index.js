@@ -28,21 +28,29 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require("./userModel.js")(sequelize, DataTypes);
-db.messages=require("./messageModel.js")(sequelize,DataTypes)
-db.groups=require("./group.js")(sequelize,DataTypes)
-db.usergroups=require('./userGroup.js')
-db.messagegroups=require('./messageGroup.js')
+db.messages = require("./messageModel.js")(sequelize, DataTypes);
+db.groups = require("./group.js")(sequelize, DataTypes);
+db.usergroups = require("./userGroup.js");
 
-db.sequelize.sync({ force: true}).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
   console.log("sync done");
 });
 db.users.hasMany(db.messages);
 db.messages.belongsTo(db.users);
 
-db.users.belongsToMany(db.groups,{through:"UserGroup"})
-db.groups.belongsToMany(db.users,{through:"UserGroup"})
+db.groups.hasMany(db.messages);
+db.messages.belongsTo(db.groups);
 
-db.groups.belongsToMany(db.messages,{through:"MessageGroup"})
-db.messages.belongsToMany(db.groups,{through:"MessageGroup"})
+db.users.belongsToMany(db.groups, {
+  through: "UserGroup",
+  foreignKey: "userId",
+});
+db.groups.belongsToMany(db.users, {
+  through: "UserGroup",
+  foreignKey: "groupId",
+});
+
+// db.groups.belongsToMany(db.messages, { through: "MessageGroup" });
+// db.messages.belongsToMany(db.groups, { through: "MessageGroup" });
 
 module.exports = db;
