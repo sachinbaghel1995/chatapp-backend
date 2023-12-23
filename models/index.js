@@ -29,8 +29,11 @@ db.sequelize = sequelize;
 
 db.users = require("./userModel.js")(sequelize, DataTypes);
 db.messages = require("./messageModel.js")(sequelize, DataTypes);
+db.images = require("./imageModel.js")(sequelize, DataTypes);
 db.groups = require("./group.js")(sequelize, DataTypes);
+
 db.usergroups = require("./userGroup.js");
+
 
 db.sequelize.sync({ force: true }).then(() => {
   console.log("sync done");
@@ -38,8 +41,14 @@ db.sequelize.sync({ force: true }).then(() => {
 db.users.hasMany(db.messages);
 db.messages.belongsTo(db.users);
 
+db.users.hasMany(db.images);
+db.images.belongsTo(db.users);
+
 db.groups.hasMany(db.messages);
 db.messages.belongsTo(db.groups);
+
+db.groups.hasMany(db.images);
+db.images.belongsTo(db.groups);
 
 db.users.belongsToMany(db.groups, {
   through: "UserGroup",
